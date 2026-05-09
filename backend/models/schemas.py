@@ -11,6 +11,8 @@ class AnalyzeResponse(BaseModel):
     fairness_score: float
     toxicity_score: float
     sentiment_score: float
+    intent: str = "neutral"
+    context_note: str = ""
 
 class CounterfactualResponse(BaseModel):
     original: str

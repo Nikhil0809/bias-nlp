@@ -172,13 +172,36 @@ export default function BiasAnalyzer() {
             
             {/* Left: Score Panel */}
             <div className="md:col-span-2 card p-4 sm:p-6">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-2 mb-4 flex-wrap">
                 {result.bias_detected ? (
                   <div className="badge badge-red"><AlertTriangle size={14} /> Bias Detected</div>
                 ) : (
                   <div className="badge badge-emerald"><CheckCircle2 size={14} /> Fair</div>
                 )}
+                {result.intent && (
+                  <div className={`badge ${
+                    result.intent === 'promoting' ? 'badge-red' :
+                    result.intent === 'critical' ? 'badge-emerald' :
+                    result.intent === 'analytical' ? 'badge-blue' :
+                    result.intent === 'reporting' ? 'badge-violet' :
+                    'badge-blue'
+                  }`} style={{ fontSize: 11 }}>
+                    {result.intent === 'promoting' ? '⚠ Promoting' :
+                     result.intent === 'critical' ? '✓ Critical' :
+                     result.intent === 'analytical' ? '📊 Analytical' :
+                     result.intent === 'reporting' ? '📰 Reporting' :
+                     '◆ Neutral'}
+                  </div>
+                )}
               </div>
+
+              {result.context_note && (
+                <div className="p-3 rounded-lg mb-4" style={{ background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.12)' }}>
+                  <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                    {result.context_note}
+                  </p>
+                </div>
+              )}
 
               <div className="space-y-4 sm:space-y-5">
                 <div className="flex justify-between items-center p-3 rounded-lg" style={{ background: 'var(--bg-secondary)' }}>
