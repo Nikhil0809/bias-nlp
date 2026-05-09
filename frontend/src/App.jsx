@@ -1,139 +1,141 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Activity, BrainCircuit, BarChart3, Layers, GitBranch, Menu, X } from 'lucide-react';
+import { BrainCircuit, BarChart3, Layers, FileText, Database, Box, BookOpen, Settings, Menu, X, ChevronLeft, Zap, Bell, User } from 'lucide-react';
 import Home from './pages/Home';
 import BiasAnalyzer from './pages/BiasAnalyzer';
 import Dashboard from './pages/Dashboard';
 import ModelInsights from './pages/ModelInsights';
 
-function NavBar() {
+const sidebarLinks = [
+  { to: '/analyze', label: 'Analyzer', icon: BrainCircuit },
+  { to: '/dashboard', label: 'Dashboard', icon: BarChart3 },
+  { to: '/insights', label: 'Insights', icon: Layers },
+  { to: '/reports', label: 'Reports', icon: FileText },
+  { to: '/datasets', label: 'Datasets', icon: Database },
+  { to: '/model-hub', label: 'Model Hub', icon: Box },
+  { to: '/docs', label: 'API Documentation', icon: BookOpen },
+  { to: '/settings', label: 'Settings', icon: Settings },
+];
+
+function Sidebar({ mobileOpen, setMobileOpen }) {
   const location = useLocation();
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  const links = [
-    { to: '/analyze', label: 'Analyzer', icon: BrainCircuit },
-    { to: '/dashboard', label: 'Dashboard', icon: BarChart3 },
-    { to: '/insights', label: 'Insights', icon: Layers },
-  ];
-
   return (
-    <nav className="glass-strong sticky top-0 z-50 shadow-md" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-3 no-underline" onClick={() => setMobileOpen(false)}>
-          <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center border" style={{ borderColor: 'var(--border-subtle)' }}>
-            <img src="/logo.jpg" alt="FairNLP-MT Logo" className="w-full h-full object-cover" />
+    <>
+      {/* Desktop Sidebar */}
+      <aside className="sidebar hidden lg:flex">
+        <div className="sidebar-brand">
+          <div className="sidebar-logo">
+            <img src="/logo.jpg" alt="FairNLP-MT" />
           </div>
           <div>
-            <span className="heading-section text-lg gradient-text">FairNLP-MT</span>
-            <span className="block text-xs" style={{ color: 'var(--text-muted)', marginTop: -2, letterSpacing: '0.05em' }}>
-              AI Fairness Platform
-            </span>
+            <span className="sidebar-title">FairNLP-MT</span>
+            <span className="sidebar-subtitle">AI Fairness Platform</span>
           </div>
-        </Link>
-
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-1">
-          {links.map(({ to, label, icon: Icon }) => {
-            const active = location.pathname === to;
-            return (
-              <Link
-                key={to}
-                to={to}
-                className="nav-link"
-                style={active ? {
-                  color: 'var(--text-primary)',
-                  background: 'rgba(59, 130, 246, 0.08)',
-                  borderColor: 'rgba(59, 130, 246, 0.15)',
-                  border: '1px solid rgba(59, 130, 246, 0.15)'
-                } : {}}
-              >
-                <Icon size={16} />
-                <span>{label}</span>
-              </Link>
-            );
-          })}
-          <div style={{ width: 1, height: 24, background: 'var(--border-default)', margin: '0 8px' }} />
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="nav-link">
-            <GitBranch size={16} />
-          </a>
         </div>
+        <nav className="sidebar-nav">
+          {sidebarLinks.map(({ to, label, icon: Icon }) => (
+            <Link key={to} to={to} className={`sidebar-link${location.pathname === to ? ' active' : ''}`}>
+              <Icon size={18} />
+              <span>{label}</span>
+            </Link>
+          ))}
+        </nav>
+        <div className="sidebar-footer">
+          <div className="sidebar-upgrade">
+            <Zap size={16} style={{ color: 'var(--accent-amber)' }} />
+            <div>
+              <span className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>Upgrade to Pro</span>
+              <span className="block text-xs" style={{ color: 'var(--text-muted)' }}>Advanced analytics & API</span>
+            </div>
+          </div>
+          <div className="sidebar-status">
+            <div className="status-dot" />
+            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>All Systems Operational</span>
+          </div>
+        </div>
+      </aside>
 
-        {/* Mobile Hamburger */}
-        <button
-          className="md:hidden p-2 rounded-lg"
-          style={{ color: 'var(--text-secondary)', background: 'transparent', border: 'none', cursor: 'pointer' }}
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
-      </div>
-
-      {/* Mobile Menu Drawer */}
+      {/* Mobile Overlay */}
       {mobileOpen && (
-        <div className="md:hidden px-4 pb-4 flex flex-col gap-1" style={{ borderTop: '1px solid var(--border-subtle)' }}>
-          {links.map(({ to, label, icon: Icon }) => {
-            const active = location.pathname === to;
-            return (
-              <Link
-                key={to}
-                to={to}
-                className="nav-link"
-                onClick={() => setMobileOpen(false)}
-                style={{
-                  padding: '12px 16px',
-                  ...(active ? {
-                    color: 'var(--text-primary)',
-                    background: 'rgba(59, 130, 246, 0.08)',
-                    border: '1px solid rgba(59, 130, 246, 0.15)'
-                  } : {})
-                }}
-              >
-                <Icon size={16} />
-                <span>{label}</span>
-              </Link>
-            );
-          })}
+        <div className="sidebar-overlay" onClick={() => setMobileOpen(false)}>
+          <aside className="sidebar sidebar-mobile" onClick={e => e.stopPropagation()}>
+            <div className="sidebar-brand">
+              <div className="sidebar-logo"><img src="/logo.jpg" alt="FairNLP-MT" /></div>
+              <div>
+                <span className="sidebar-title">FairNLP-MT</span>
+                <span className="sidebar-subtitle">AI Fairness Platform</span>
+              </div>
+              <button onClick={() => setMobileOpen(false)} className="ml-auto" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                <X size={20} />
+              </button>
+            </div>
+            <nav className="sidebar-nav">
+              {sidebarLinks.map(({ to, label, icon: Icon }) => (
+                <Link key={to} to={to} className={`sidebar-link${location.pathname === to ? ' active' : ''}`} onClick={() => setMobileOpen(false)}>
+                  <Icon size={18} /><span>{label}</span>
+                </Link>
+              ))}
+            </nav>
+          </aside>
         </div>
       )}
-    </nav>
+    </>
+  );
+}
+
+function TopBar({ setMobileOpen }) {
+  const location = useLocation();
+  const pageName = sidebarLinks.find(l => l.to === location.pathname)?.label || 'Home';
+  return (
+    <header className="topbar">
+      <div className="topbar-left">
+        <button className="lg:hidden topbar-menu-btn" onClick={() => setMobileOpen(true)}>
+          <Menu size={20} />
+        </button>
+        <ChevronLeft size={16} style={{ color: 'var(--text-muted)' }} />
+        <span className="topbar-page">{pageName}</span>
+        <span className="badge badge-emerald" style={{ fontSize: 10 }}>Real-time Analysis</span>
+      </div>
+      <div className="topbar-right">
+        <button className="topbar-icon-btn"><Bell size={18} /></button>
+        <div className="topbar-user">
+          <div className="topbar-avatar">A</div>
+          <div className="hidden sm:block">
+            <span className="topbar-username">Admin</span>
+            <span className="topbar-role">Researcher</span>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 }
 
 function App() {
+  const [mobileOpen, setMobileOpen] = useState(false);
   return (
     <Router>
-      <div className="min-h-screen grid-pattern" style={{ background: 'var(--bg-primary)' }}>
-        {/* Background glow orbs */}
-        <div className="glow-orb" style={{ top: '-200px', left: '-100px', background: 'var(--accent-blue)', animation: 'pulse-glow 6s ease-in-out infinite' }} />
-        <div className="glow-orb" style={{ top: '50%', right: '-200px', background: 'var(--accent-violet)', animation: 'pulse-glow 8s ease-in-out infinite 2s' }} />
-
-        <NavBar />
-
-        <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/analyze" element={<BiasAnalyzer />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/insights" element={<ModelInsights />} />
-          </Routes>
-        </main>
-
-        {/* Footer */}
-        <footer className="relative z-10 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col sm:flex-row justify-between items-center gap-3">
-            <p className="text-xs sm:text-sm" style={{ color: 'var(--text-muted)' }}>
-              © 2026 FairNLP-MT Research Lab. All rights reserved.
-            </p>
-            <div className="flex gap-4 sm:gap-6 text-xs sm:text-sm" style={{ color: 'var(--text-muted)' }}>
-              <span>RoBERTa-base</span>
-              <span>·</span>
-              <span>PyTorch</span>
-              <span>·</span>
-              <span>FastAPI</span>
-            </div>
-          </div>
-        </footer>
+      <div className="app-layout">
+        <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
+        <div className="app-main">
+          <TopBar setMobileOpen={setMobileOpen} />
+          <main className="app-content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/analyze" element={<BiasAnalyzer />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/insights" element={<ModelInsights />} />
+              <Route path="/reports" element={<Dashboard />} />
+              <Route path="/datasets" element={<Dashboard />} />
+              <Route path="/model-hub" element={<ModelInsights />} />
+              <Route path="/docs" element={<ModelInsights />} />
+              <Route path="/settings" element={<ModelInsights />} />
+            </Routes>
+          </main>
+          <footer className="app-footer">
+            <span>FairNLP-MT v2.0 · Empowering Fairness in NLP</span>
+            <span>Built with ❤ for Ethical AI Research</span>
+          </footer>
+        </div>
       </div>
     </Router>
   );
