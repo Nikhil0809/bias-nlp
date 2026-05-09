@@ -4,8 +4,11 @@ import axios from 'axios';
 import { AlertTriangle, CheckCircle2, ArrowRightLeft, Sparkles, RefreshCw, Send, Copy, TrendingDown } from 'lucide-react';
 
 const getApiUrl = () => {
-  const envUrl = import.meta.env.VITE_API_URL;
+  let envUrl = import.meta.env.VITE_API_URL;
   if (envUrl) {
+    if (!envUrl.startsWith('http')) {
+      envUrl = `https://${envUrl}`;
+    }
     return envUrl.endsWith('/api') ? envUrl : `${envUrl.replace(/\/$/, '')}/api`;
   }
   return "http://localhost:8000/api";
