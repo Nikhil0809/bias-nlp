@@ -4,9 +4,9 @@ class GenerativeDebiaser:
     def __init__(self):
         # Initialize the instruction-tuned FLAN-T5 model
         # Using the "small" or "base" model based on local resource constraints.
-        # "base" provides a good balance between speed and generation quality.
-        print("Loading generative debiasing model (google/flan-t5-base)...")
-        self.generator = pipeline("text2text-generation", model="google/flan-t5-base")
+        # Using the "small" model because "base" exceeds the 500MB RAM limit of Railway Free Tier
+        print("Loading generative debiasing model (google/flan-t5-small)...")
+        self.generator = pipeline("text2text-generation", model="google/flan-t5-small")
         print("Model loaded successfully.")
 
     def rewrite(self, text: str) -> str:
