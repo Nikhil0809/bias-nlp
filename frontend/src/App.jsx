@@ -96,33 +96,42 @@ function TopBar({ setMobileOpen }) {
   );
 }
 
-function App() {
+function AppContent() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
+  return (
+    <div className="app-layout">
+      {!isHomePage && <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />}
+      <div className="app-main">
+        {!isHomePage && <TopBar setMobileOpen={setMobileOpen} />}
+        <main className="app-content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/analyze" element={<BiasAnalyzer />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/insights" element={<ModelInsights />} />
+            <Route path="/reports" element={<Dashboard />} />
+            <Route path="/datasets" element={<Dashboard />} />
+            <Route path="/model-hub" element={<ModelInsights />} />
+            <Route path="/docs" element={<ModelInsights />} />
+            <Route path="/settings" element={<ModelInsights />} />
+          </Routes>
+        </main>
+        <footer className="app-footer">
+          <span>FairNLP-MT v2.0 · Empowering Fairness in NLP</span>
+          <span>Built with ❤ for Ethical AI Research</span>
+        </footer>
+      </div>
+    </div>
+  );
+}
+
+function App() {
   return (
     <Router>
-      <div className="app-layout">
-        <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
-        <div className="app-main">
-          <TopBar setMobileOpen={setMobileOpen} />
-          <main className="app-content">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/analyze" element={<BiasAnalyzer />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/insights" element={<ModelInsights />} />
-              <Route path="/reports" element={<Dashboard />} />
-              <Route path="/datasets" element={<Dashboard />} />
-              <Route path="/model-hub" element={<ModelInsights />} />
-              <Route path="/docs" element={<ModelInsights />} />
-              <Route path="/settings" element={<ModelInsights />} />
-            </Routes>
-          </main>
-          <footer className="app-footer">
-            <span>FairNLP-MT v2.0 · Empowering Fairness in NLP</span>
-            <span>Built with ❤ for Ethical AI Research</span>
-          </footer>
-        </div>
-      </div>
+      <AppContent />
     </Router>
   );
 }
