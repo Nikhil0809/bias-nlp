@@ -213,6 +213,41 @@ export default function BiasAnalyzer() {
                 <ScoreBar label="Fairness" value={result.fairness_score} color="var(--accent-emerald)" />
                 <ScoreBar label="Toxicity" value={result.toxicity_score} color="var(--accent-amber)" />
                 <ScoreBar label="Sentiment" value={result.sentiment_score} color="var(--accent-blue)" />
+
+                {/* Fairness Metrics */}
+                {result.bias_severity && (
+                  <div className="pt-3 mt-3" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+                    <span className="text-xs font-semibold block mb-3" style={{ color: 'var(--text-muted)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                      Fairness Metrics
+                    </span>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { label: 'DPG', value: result.demographic_parity_gap, tip: 'Demographic Parity Gap' },
+                        { label: 'EOD', value: result.equalized_odds_diff, tip: 'Equalized Odds Diff' },
+                        { label: 'SEAT', value: result.seat_score, tip: 'SEAT Effect Size' },
+                        { label: 'Severity', value: result.bias_severity, tip: 'Bias Severity Level' },
+                      ].map(m => (
+                        <div key={m.label} className="p-2 rounded-lg text-center" style={{ background: 'var(--bg-secondary)' }}>
+                          <span className="block text-xs" style={{ color: 'var(--text-muted)' }}>{m.label}</span>
+                          <span className="block text-sm font-semibold capitalize" style={{ color: typeof m.value === 'string' ? (m.value === 'none' || m.value === 'low' ? 'var(--accent-emerald)' : m.value === 'medium' ? 'var(--accent-amber)' : 'var(--accent-red)') : 'var(--text-primary)', fontFamily: typeof m.value === 'number' ? 'var(--font-mono)' : 'inherit' }}>
+                            {typeof m.value === 'number' ? m.value.toFixed(3) : m.value}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Protected Attributes */}
+                    {result.protected_attributes && result.protected_attributes.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mt-3">
+                        {result.protected_attributes.map(attr => (
+                          <span key={attr} className="badge badge-violet" style={{ fontSize: 10, padding: '2px 8px' }}>
+                            {attr}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -239,6 +274,9 @@ export default function BiasAnalyzer() {
                     <div className="flex items-center gap-2 mb-3">
                       <ArrowRightLeft size={14} style={{ color: 'var(--accent-blue)' }} />
                       <span className="text-xs font-semibold" style={{ color: 'var(--text-muted)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Counterfactual</span>
+                      {counterfactual.swap_count > 0 && (
+                        <span className="badge badge-blue" style={{ fontSize: 10 }}>{counterfactual.swap_count} swaps</span>
+                      )}
                     </div>
                     <p className="text-mono p-3 rounded-lg break-words" style={{ background: 'var(--bg-secondary)', color: 'var(--accent-blue)', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
                       {counterfactual.counterfactual}
@@ -255,6 +293,9 @@ export default function BiasAnalyzer() {
                       <div className="flex items-center gap-2">
                         <Sparkles size={14} style={{ color: 'var(--accent-violet)' }} />
                         <span className="text-xs font-semibold" style={{ color: 'var(--text-muted)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Debiased Output</span>
+                        {debiased.iterations > 1 && (
+                          <span className="badge badge-violet" style={{ fontSize: 10 }}>{debiased.iterations} iterations</span>
+                        )}
                       </div>
                       <div className="badge badge-emerald">
                         <TrendingDown size={12} /> -{debiased.reduction_percentage}% bias
