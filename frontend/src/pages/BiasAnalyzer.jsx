@@ -181,7 +181,7 @@ export default function BiasAnalyzer() {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
 
         {/* Input Area */}
-        <div className="lg:col-span-3 card p-4 sm:p-5">
+        <div className={`${(result || loading) ? 'lg:col-span-3' : 'lg:col-span-5'} card p-4 sm:p-5`}>
           <textarea className="input-field mb-3" rows={5}
             placeholder="Paste or type your text here..."
             value={text} onChange={e => setText(e.target.value)}
@@ -216,24 +216,26 @@ export default function BiasAnalyzer() {
         </div>
 
         {/* Pipeline Visualization */}
-        <div className="lg:col-span-2 card p-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold" style={{ color: 'var(--text-secondary)' }}>AI Analysis Pipeline</span>
-            {result && <span className="badge badge-emerald" style={{ fontSize: 10 }}>● Live</span>}
-          </div>
-          <PipelineVis activeStep={pipelineStep} />
-          {loading && (
-            <div className="mt-3">
-              <div className="flex justify-between text-xs mb-1" style={{ color: 'var(--text-muted)' }}>
-                <span>Analyzing semantic fairness patterns...</span>
-                <span>85%</span>
-              </div>
-              <div className="progress-bar">
-                <motion.div className="progress-fill" initial={{ width: 0 }} animate={{ width: '85%' }} transition={{ duration: 2 }} />
-              </div>
+        {(result || loading) && (
+          <div className="lg:col-span-2 card p-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-semibold" style={{ color: 'var(--text-secondary)' }}>AI Analysis Pipeline</span>
+              {result && <span className="badge badge-emerald" style={{ fontSize: 10 }}>● Live</span>}
             </div>
-          )}
-        </div>
+            <PipelineVis activeStep={pipelineStep} />
+            {loading && (
+              <div className="mt-3">
+                <div className="flex justify-between text-xs mb-1" style={{ color: 'var(--text-muted)' }}>
+                  <span>Analyzing semantic fairness patterns...</span>
+                  <span>85%</span>
+                </div>
+                <div className="progress-bar">
+                  <motion.div className="progress-fill" initial={{ width: 0 }} animate={{ width: '85%' }} transition={{ duration: 2 }} />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* ── Results Grid ── */}

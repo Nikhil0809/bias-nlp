@@ -41,13 +41,6 @@ function Sidebar({ mobileOpen, setMobileOpen }) {
           ))}
         </nav>
         <div className="sidebar-footer">
-          <div className="sidebar-upgrade">
-            <Zap size={16} style={{ color: 'var(--accent-amber)' }} />
-            <div>
-              <span className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>Upgrade to Pro</span>
-              <span className="block text-xs" style={{ color: 'var(--text-muted)' }}>Advanced analytics & API</span>
-            </div>
-          </div>
           <div className="sidebar-status">
             <div className="status-dot" />
             <span className="text-xs" style={{ color: 'var(--text-muted)' }}>All Systems Operational</span>
@@ -97,14 +90,7 @@ function TopBar({ setMobileOpen }) {
         <span className="badge badge-emerald" style={{ fontSize: 10 }}>Real-time Analysis</span>
       </div>
       <div className="topbar-right">
-        <button className="topbar-icon-btn"><Bell size={18} /></button>
-        <div className="topbar-user">
-          <div className="topbar-avatar">A</div>
-          <div className="hidden sm:block">
-            <span className="topbar-username">Admin</span>
-            <span className="topbar-role">Researcher</span>
-          </div>
-        </div>
+        {/* User icons and upgrade removed */}
       </div>
     </header>
   );
