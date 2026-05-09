@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { BrainCircuit, BarChart3, Layers, FileText, Database, Box, BookOpen, Settings, Menu, X, ChevronLeft, Zap, Bell, User } from 'lucide-react';
+import { BrainCircuit, BarChart3, Layers, FileText, Database, Box, BookOpen, Settings, Menu, X, ChevronLeft, Zap, Bell, User, Home as HomeIcon } from 'lucide-react';
 import Home from './pages/Home';
 import BiasAnalyzer from './pages/BiasAnalyzer';
 import Dashboard from './pages/Dashboard';
 import ModelInsights from './pages/ModelInsights';
 
 const sidebarLinks = [
+  { to: '/', label: 'Home Intro', icon: HomeIcon },
   { to: '/analyze', label: 'Analyzer', icon: BrainCircuit },
   { to: '/dashboard', label: 'Dashboard', icon: BarChart3 },
   { to: '/insights', label: 'Insights', icon: Layers },
@@ -90,7 +91,10 @@ function TopBar({ setMobileOpen }) {
         <span className="badge badge-emerald" style={{ fontSize: 10 }}>Real-time Analysis</span>
       </div>
       <div className="topbar-right">
-        {/* User icons and upgrade removed */}
+        <Link to="/" className="btn btn-ghost" style={{ padding: '6px 12px', fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+          <HomeIcon size={14} />
+          <span>Home Intro</span>
+        </Link>
       </div>
     </header>
   );
