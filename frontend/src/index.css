@@ -431,7 +431,6 @@ body {
 
 /* ── Sidebar ── */
 .sidebar {
-  width: 240px;
   min-height: 100vh;
   background: #080c16;
   border-right: 1px solid var(--border-subtle);
@@ -442,6 +441,7 @@ body {
   top: 0;
   height: 100vh;
   overflow-y: auto;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar-brand {
@@ -721,6 +721,12 @@ body {
   gap: 0;
   padding: 16px 0;
   overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.pipeline-vis::-webkit-scrollbar {
+  display: none;
 }
 
 .pipeline-step {

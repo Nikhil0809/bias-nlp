@@ -18,33 +18,35 @@ const sidebarLinks = [
   { to: '/settings', label: 'Settings', icon: Settings },
 ];
 
-function Sidebar({ mobileOpen, setMobileOpen }) {
+function Sidebar({ mobileOpen, setMobileOpen, sidebarOpen }) {
   const location = useLocation();
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="sidebar hidden lg:flex">
-        <div className="sidebar-brand">
+      <aside className="sidebar hidden lg:flex" style={{ width: sidebarOpen ? '240px' : '70px' }}>
+        <div className="sidebar-brand" style={{ padding: sidebarOpen ? '20px 18px 16px' : '20px 12px 16px', justifyContent: sidebarOpen ? 'flex-start' : 'center' }}>
           <div className="sidebar-logo">
             <img src="/logo.jpg" alt="FairNLP-MT" />
           </div>
-          <div>
-            <span className="sidebar-title">FairNLP-MT</span>
-            <span className="sidebar-subtitle">AI Fairness Platform</span>
-          </div>
+          {sidebarOpen && (
+            <div>
+              <span className="sidebar-title">FairNLP-MT</span>
+              <span className="sidebar-subtitle">AI Fairness Platform</span>
+            </div>
+          )}
         </div>
-        <nav className="sidebar-nav">
+        <nav className="sidebar-nav" style={{ padding: sidebarOpen ? '12px 10px' : '12px 6px' }}>
           {sidebarLinks.map(({ to, label, icon: Icon }) => (
-            <Link key={to} to={to} className={`sidebar-link${location.pathname === to ? ' active' : ''}`}>
+            <Link key={to} to={to} className={`sidebar-link${location.pathname === to ? ' active' : ''}`} style={{ justifyContent: sidebarOpen ? 'flex-start' : 'center', padding: sidebarOpen ? '10px 14px' : '10px 0' }} title={!sidebarOpen ? label : ''}>
               <Icon size={18} />
-              <span>{label}</span>
+              {sidebarOpen && <span>{label}</span>}
             </Link>
           ))}
         </nav>
-        <div className="sidebar-footer">
+        <div className="sidebar-footer" style={{ padding: sidebarOpen ? '12px 14px 16px' : '12px 0 16px', display: 'flex', justifyContent: 'center' }}>
           <div className="sidebar-status">
             <div className="status-dot" />
-            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>All Systems Operational</span>
+            {sidebarOpen && <span className="text-xs" style={{ color: 'var(--text-muted)' }}>All Systems Operational</span>}
           </div>
         </div>
       </aside>
@@ -52,7 +54,7 @@ function Sidebar({ mobileOpen, setMobileOpen }) {
       {/* Mobile Overlay */}
       {mobileOpen && (
         <div className="sidebar-overlay" onClick={() => setMobileOpen(false)}>
-          <aside className="sidebar sidebar-mobile" onClick={e => e.stopPropagation()}>
+          <aside className="sidebar sidebar-mobile" onClick={e => e.stopPropagation()} style={{ width: '240px' }}>
             <div className="sidebar-brand">
               <div className="sidebar-logo"><img src="/logo.jpg" alt="FairNLP-MT" /></div>
               <div>
@@ -77,13 +79,18 @@ function Sidebar({ mobileOpen, setMobileOpen }) {
   );
 }
 
-function TopBar({ setMobileOpen }) {
+function TopBar({ setMobileOpen, sidebarOpen, setSidebarOpen }) {
   const location = useLocation();
   const pageName = sidebarLinks.find(l => l.to === location.pathname)?.label || 'Home';
   return (
     <header className="topbar">
       <div className="topbar-left">
+        {/* Mobile toggle */}
         <button className="lg:hidden topbar-menu-btn" onClick={() => setMobileOpen(true)}>
+          <Menu size={20} />
+        </button>
+        {/* Desktop toggle */}
+        <button className="hidden lg:block topbar-menu-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
           <Menu size={20} />
         </button>
         <ChevronLeft size={16} style={{ color: 'var(--text-muted)' }} />
@@ -102,14 +109,15 @@ function TopBar({ setMobileOpen }) {
 
 function AppContent() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // set default to close!
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
   return (
     <div className="app-layout">
-      {!isHomePage && <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />}
+      {!isHomePage && <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} sidebarOpen={sidebarOpen} />}
       <div className="app-main">
-        {!isHomePage && <TopBar setMobileOpen={setMobileOpen} />}
+        {!isHomePage && <TopBar setMobileOpen={setMobileOpen} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />}
         <main className="app-content">
           <Routes>
             <Route path="/" element={<Home />} />
