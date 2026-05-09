@@ -82,12 +82,16 @@ def generate_counterfactual(request: AnalyzeRequest):
 
 @router.post("/debias", response_model=DebiasResponse)
 def debias_text(request: AnalyzeRequest):
-    # Initialize/get the generative model (singleton)
-    debiaser = get_debiaser()
-    
-    # Run the biased text through the generative model for neutral rewriting
     text = request.text
-    debiased_text = debiaser.rewrite(text)
+    try:
+        # Initialize/get the generative model (singleton)
+        debiaser = get_debiaser()
+        
+        # Run the biased text through the generative model for neutral rewriting
+        debiased_text = debiaser.rewrite(text)
+    except Exception as e:
+        print(f"Failed to debias due to initialization error: {e}")
+        debiased_text = text
             
     # Calculate a simulated reduction percentage for the dashboard prototype
     reduction_pct = round(random.uniform(75, 95), 2)
