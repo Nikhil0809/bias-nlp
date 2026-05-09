@@ -20,9 +20,8 @@ function NavBar() {
     <nav className="glass-strong sticky top-0 z-50 shadow-md" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-3 no-underline" onClick={() => setMobileOpen(false)}>
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center"
-               style={{ background: 'linear-gradient(135deg, var(--accent-blue), var(--accent-violet))' }}>
-            <Activity size={20} color="white" strokeWidth={2.5} />
+          <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center border" style={{ borderColor: 'var(--border-subtle)' }}>
+            <img src="/logo.jpg" alt="FairNLP-MT Logo" className="w-full h-full object-cover" />
           </div>
           <div>
             <span className="heading-section text-lg gradient-text">FairNLP-MT</span>

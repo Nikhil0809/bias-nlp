@@ -7,7 +7,14 @@ import {
 } from 'recharts';
 import { TrendingDown, Shield, Target, Gauge } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+const getApiUrl = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl) {
+    return envUrl.endsWith('/api') ? envUrl : `${envUrl.replace(/\/$/, '')}/api`;
+  }
+  return "http://localhost:8000/api";
+};
+const API_URL = getApiUrl();
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
